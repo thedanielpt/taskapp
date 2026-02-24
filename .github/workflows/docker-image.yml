@@ -1,47 +1,51 @@
-name: TaskApp CI
+name: CI TaskApp
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  test:
+  pruebas:
+    name: Ejecutar pruebas
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Descargar código
+        uses: actions/checkout@v4
 
-      - name: Set up Buildx
+      - name: Configurar Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Run tests (Docker target: test)
+      - name: Ejecutar tests (target: test)
         uses: docker/build-push-action@v6
         with:
           context: .
           target: test
           push: false
 
-  production:
+  produccion:
+    name: Construir y subir imagen
     runs-on: ubuntu-latest
-    needs: test
+    needs: pruebas
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
+      - name: Descargar código
+        uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
+      - name: Iniciar sesión en Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.NAME_DOCKER_HUP }}
           password: ${{ secrets.PASSWORD_DOCKER_HUP }}
 
-      - name: Set up QEMU
+      - name: Configurar QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Set up Buildx
+      - name: Configurar Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push production image
+      - name: Construir y subir imagen de producción
         uses: docker/build-push-action@v6
         with:
           context: .
