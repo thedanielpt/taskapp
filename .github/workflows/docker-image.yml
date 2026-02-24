@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Iniciar sesión en Docker Hub
-        run: docker login -u ${{ secrets.NOMBRE_DOCKER_HUB }} -p ${{ secrets.TOKEN_DOCKER_HUB }}
+        run: docker login -u ${{ secrets.NAME_DOCKER_HUP }} -p ${{ secrets.TOKEN_DOCKER_HUP }}
 
       - name: Configurar QEMU
         uses: docker/setup-qemu-action@v3
