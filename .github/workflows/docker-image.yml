@@ -17,7 +17,7 @@ jobs:
       - name: Configurar Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Ejecutar tests (target: test)
+      - name: Ejecutar tests
         uses: docker/build-push-action@v6
         with:
           context: .
